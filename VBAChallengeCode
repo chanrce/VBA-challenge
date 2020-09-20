@@ -1,0 +1,79 @@
+Sub Stocks()
+    
+   For Each ws In Worksheets
+    
+        totalvolume = 0
+        LastRow = ws.Cells(Rows.Count, "A").End(xlUp).Row
+        
+        Dim SummaryTableRow As Integer
+        SummaryTableRow = 2
+        
+        'Loop exception, start with every new ws:
+        openprow = 2
+        
+        Dim tickername As String
+        
+        ws.Cells(1, 9).Value = "Ticker"
+        ws.Cells(1, 10).Value = "Yearly Change"
+        ws.Cells(1, 11).Value = "Percent Change"
+        ws.Cells(1, 12).Value = "Total Stock Volume"
+        
+    
+        For i = 2 To LastRow
+        
+            If ws.Cells(i + 1, 1).Value = ws.Cells(i, 1).Value Then
+                totalvolume = totalvolume + ws.Cells(i, 7).Value
+        
+                
+            Else
+            
+            
+                tickername = ws.Cells(i, 1).Value
+                totalvolume = totalvolume + ws.Cells(i, 7).Value
+                
+                yearlychange = ws.Cells(i, 6) - ws.Cells(openprow, 3)
+                    
+                    If ws.Cells(openprow, 3) <> 0 Then
+                        percentchange = ((ws.Cells(i, 6) - ws.Cells(openprow, 3)) / (ws.Cells(openprow, 3))) * 100
+                    End If
+                
+                ws.Range("I" & SummaryTableRow).Value = tickername
+                ws.Range("L" & SummaryTableRow).Value = totalvolume
+                ws.Range("J" & SummaryTableRow).Value = yearlychange
+                ws.Range("K" & SummaryTableRow).Value = percentchange
+                    
+                SummaryTableRow = SummaryTableRow + 1
+                totalvolume = 0
+                
+                openprow = i + 1
+            
+            End If
+        
+        Next i
+        
+        For i = 2 To LastRow
+            
+            If ws.Cells(i, 10) > 0 Then
+                ws.Cells(i, 10).Interior.ColorIndex = 4
+            
+            ElseIf ws.Cells(i, 10) < 0 Then
+                ws.Cells(i, 10).Interior.ColorIndex = 3
+            
+            Else
+                ws.Cells(i, 10).Interior.ColorIndex = 2
+            
+        End If
+        
+        Next i
+        
+        
+  Next ws
+        
+    
+
+End Sub
+
+
+
+
+
